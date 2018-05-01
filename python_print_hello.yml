@@ -7,4 +7,4 @@ image_resource:
 
 run:
   path: python
-  args: [hello world]
+  args: ["print_hello.py"]
