@@ -2,9 +2,9 @@
 platform: linux
 
 image_resource:
-	type: docker-image
-	source: {repository: busybox}
+  type: docker-image
+  source: {repository: busybox}
 
 run:
-	path: echo
-	args: [hello world]
+  path: echo
+  args: [hello world]
