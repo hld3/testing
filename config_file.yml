@@ -1,0 +1,6 @@
+platform: linux
+inputs:
+  - name: hldo-git-repo
+run:
+    path: python
+    args: ['hld3-git-repo/print_hello.py']
