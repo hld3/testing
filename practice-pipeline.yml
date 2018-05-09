@@ -1,0 +1,37 @@
+resources:
+  - name: hld3-git-repo
+    type: git
+    source:
+      uri: https://github.com/hld3/testing.git
+      branch: master
+
+  - name: python-image
+    type: docker-image
+    source: {repository: python, tag: rc-stretch}
+
+  - name: timer
+    type: time
+    source:
+      interval: 15m
+
+jobs:
+
+  - name: run-python-file
+    public: true
+    plan:
+    - get: hld3-git-repo
+      trigger: true
+    - get: python-image
+    - get: timer
+      trigger: true
+    - task: print-hello-world
+      image: python-image
+      file: hld3-git-repo/ci/config/config_file.yml
+#      config:
+#        platform: linux
+#        inputs:
+#          - name: hld3-git-repo
+#        run: 
+#          path: python
+#          args: ["hld3-git-repo/print_hello.py"]
+
