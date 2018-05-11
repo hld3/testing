@@ -1,0 +1,60 @@
+resources:
+  - name: hld3-git-repo
+    type: git
+    source:
+      uri: https://github.com/hld3/testing.git
+      branch: master
+
+  - name: random-docker-repo
+    type: docker-image
+    source: 
+      repository: hld3/random
+      username: ((username))
+      password: ((password))
+
+  - name: my-python-image
+    type: docker-image
+    source: 
+      repository: hld3/test
+      username: ((username))
+      password: ((password))
+
+jobs:
+
+  - name: write-to-file
+    public: true
+    plan:
+    - get: hld3-git-repo
+    - get: my-python-image
+    - task: create-file
+      image: my-python-image
+      config:
+        platform: linux
+        inputs:
+          - name: hld3-git-repo
+        outputs:
+          - name: new-file
+
+        run:
+          path: hld3-git-repo/ci_output_test/scripts/create_files.sh
+    - put: random-docker-repo
+      params: 
+        build: hld3-git-repo/ci
+
+#  - name: read-from-file
+#    public: true
+#    plan:
+#    - get: my-python-image
+#      passed: [write-to-file]
+#      trigger: true
+#    - task: print-file-contents
+#      image: my-python-image
+#      config:
+#        platform: linux
+#        inputs:
+#          - name: write-to-file
+
+#        run:
+#          path: ls
+#          args: ["-l"]
+
