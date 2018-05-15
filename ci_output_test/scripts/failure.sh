@@ -1,3 +1,3 @@
 #!/bin/sh
 
-print('FAILED')
+echo 'FAILED' > bug-numbers/file1.txt
