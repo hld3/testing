@@ -5,19 +5,19 @@ resources:
       uri: https://github.com/hld3/testing.git
       branch: master
 
-  - name: random-docker-repo
+  - name: alpine-python2-requests
     type: docker-image
     source: 
-      repository: hld3/random
-      username: ((username))
-      password: ((password))
+      repository: hld3/alpine-python2-requests
+#       username: ((username))
+#       password: ((password))
 
-  - name: my-python-image
-    type: docker-image
-    source: 
-      repository: hld3/test
-      username: ((username))
-      password: ((password))
+#   - name: my-python-image
+#     type: docker-image
+#     source: 
+#       repository: hld3/test
+#       username: ((username))
+#       password: ((password))
 
 jobs:
 
@@ -25,9 +25,9 @@ jobs:
     public: true
     plan:
     - get: hld3-git-repo
-    - get: my-python-image
+    - get: alpine-python2-requests
     - task: create-file
-      image: my-python-image
+      image: alpine-python2-requests
       config:
         platform: linux
         inputs:
@@ -36,10 +36,25 @@ jobs:
           - name: new-file
 
         run:
-          path: hld3-git-repo/ci_output_test/scripts/create_files.sh
-    - put: random-docker-repo
-      params: 
-        build: hld3-git-repo/ci
+          path: sh
+          args: 
+            - -exc
+            - |
+              # Grab the metadata
+              url=$(cat metadata/atc_external_url)
+              team=$(cat metadata/build_team_name)
+              pipeline=$(cat metadata/build_pipeline_name)
+              job=$(cat metadata/build_job_name)
+              build=$(cat metadata/build_name)
+
+              # Generate the build URL to a file
+              echo $url/teams/$team/pipelines/$pipeline/jobs/$job/builds/$build
+
+#     - put: random-docker-repo
+#       params: 
+          
+#         build: hld3-git-repo/ci
+
 
 #  - name: read-from-file
 #    public: true
