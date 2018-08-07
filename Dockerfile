@@ -1,4 +1,4 @@
 FROM alpine:3.7
 
-ADD my-github /home/
+ADD print_hello.py /home/
 WORKDIR /home
